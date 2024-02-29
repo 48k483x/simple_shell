@@ -21,7 +21,7 @@ main(int ac, char **av)
 
 		while (1)
 		{
-			printf("Shhhh> ");
+			printf("$ ");
 			fflush(stdout);
 			read = getline(&line, &len, stdin);
 			if (read == -1)
