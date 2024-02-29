@@ -35,7 +35,7 @@ main(int ac, char **av)
 			fflush(stdout);
 			read = getline(&line, &len, stdin);
 			if (read == -1)
-				exit_message(errno, line);
+				exit_message(12, line);
 			if (read > 0 && line[read - 1] == '\n')
 				line[read - 1] = '\0';
 			if (strcmp(line, "exit") == 0)
@@ -44,14 +44,14 @@ main(int ac, char **av)
 			{
 				pid = fork();
 				if (pid == -1)
-					exit_message(errno, line);
+					exit_message(12, line);
 				else if (pid == 0)
 				{
 					char *program = strtok(line, " ");
 					char *arg = strtok(NULL, " ");
 					char *args[] = {program, arg, NULL};
 					if (execvp(args[0], args) == -1)
-						exit_message(errno, line);
+						exit_message(2, line);
 				}
 				else
 						waitpid(pid, NULL, 0);
