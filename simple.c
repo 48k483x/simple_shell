@@ -10,6 +10,13 @@
  * 			wait3() wait4()  write()
  */
 
+char *exit_message(int errno, char *line)
+{
+	perror("Error");
+	free(line);
+	exit(errno);
+}
+
 int
 main(int ac, char **av)
 {
@@ -24,34 +31,30 @@ main(int ac, char **av)
 
 		while (1)
 		{
-			printf("shhh> ");
+			printf("Shhhh> ");
 			fflush(stdout);
 			read = getline(&line, &len, stdin);
 			if (read == -1)
-			{
-				perror("getline");
-				exit(1);
-			}
-			if (strcmp(line, "exit\n") == 0)
-			{
-				free(line);
-				exit(0);
-			}
+				exit_message(errno, line);
+			if (read > 0 && line[read - 1] == '\n')
+				line[read - 1] = '\0';
+			if (strcmp(line, "exit") == 0)
+				exit_message(0, line);
 			else
 			{
 				pid = fork();
 				if (pid == -1)
-				{
-					perror("fork");
-					exit(1);
-				}
+					exit_message(errno, line);
 				else if (pid == 0)
 				{
 					char *program = strtok(line, " ");
 					char *arg = strtok(NULL, " ");
 					char *args[] = {program, arg, NULL};
-					execvp(args[0], args);
+					if (execvp(args[0], args) == -1)
+						exit_message(errno, line);
 				}
+				else
+						waitpid(pid, NULL, 0);
 			}
 		}
 	}
