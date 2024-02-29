@@ -10,11 +10,11 @@
  * 			wait3() wait4()  write()
  */
 
-char *exit_message(int errno, char *line)
+char *exit_message(int err_no, char *line)
 {
 	perror("Error");
 	free(line);
-	exit(errno);
+	exit(err_no);
 }
 
 int
