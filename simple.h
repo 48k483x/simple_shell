@@ -11,5 +11,7 @@
 # include <errno.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <fcntl.h>
+# include <signal.h>
 
 #endif // SIMPLE_H
